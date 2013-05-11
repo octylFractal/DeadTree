@@ -9,9 +9,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import k.logix.main.LogixMain;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class ScreenUtil {
 	private static HashMap<String, Document> idToDOM = new HashMap<String, Document>();
+	private static String sep = File.separator;
+	private static File screens = new File(
+			LogixMain.TOP_LEVEL.getAbsolutePath() + sep + "screens" + sep);
 	private static boolean init;
 	public static boolean currentlyInit;
 
@@ -24,7 +28,12 @@ public class ScreenUtil {
 			return;
 		currentlyInit = true;
 		init = true;
-		for(File f : new File(LogixMain.TOP_LEVEL, "/screen/").listFiles()) {
+		System.out.println("Path: "
+				+ screens.getAbsolutePath()
+				+ " "
+				+ (screens.isDirectory() ? "is a directory"
+						: "is not a directory"));
+		for (File f : screens.listFiles()) {
 			try {
 				Document d = loadDocument(f);
 				idToDOM.put(getID(d), d);
@@ -37,7 +46,8 @@ public class ScreenUtil {
 	}
 
 	private static String getID(Document d) {
-		String id = d.getElementById("screen").getAttribute("id");
+		String id = ((Element) d.getElementsByTagName("screen").item(0))
+				.getAttribute("id");
 		return id;
 	}
 
