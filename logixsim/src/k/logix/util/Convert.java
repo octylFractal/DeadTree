@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import k.logix.main.BuildAreaFactory;
 import k.logix.xml.SNodeInfo;
 
 public class Convert {
@@ -19,13 +20,16 @@ public class Convert {
 		case SNodeInfo.SCREEN:
 			c = new JPanel(true);
 			break;
+		case SNodeInfo.BUILD_AREA:
+			c = BuildAreaFactory.newBuild(info);
+			break;
 		case SNodeInfo.UNKNOWN:
 			c = new JLabel(
 					"Error parsing this element: unknown element "
 							+ info.base.getNodeName()
 							+ ".\n"
-							+ "Please report this error to the developer of the level pack"
-							+ "(the developer if you have not added any level packs");
+							+ "Please report this error to the developer of the mod pack"
+							+ "(the developer if you have not added any mod packs)");
 			break;
 		default:
 			c = null;

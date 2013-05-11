@@ -12,6 +12,7 @@ public class SNodeInfo {
 	public static final int ATTRIBUTES_TOTAL = 6;
 	public static final int BUTTON = 0x01;
 	public static final int SCREEN = 0x02;
+	public static final int BUILD_AREA = 0x03;
 	public static final int UNKNOWN = 0xDEADBEEF;
 
 	private static final HashMap<String, Integer> nameToType = new HashMap<String, Integer>();
@@ -70,6 +71,7 @@ public class SNodeInfo {
 	private void init() {
 		nameToType.put("button", BUTTON);
 		nameToType.put("screen", SCREEN);
+		nameToType.put("buildarea", BUILD_AREA);
 	}
 
 	{

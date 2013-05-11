@@ -14,11 +14,10 @@ import org.w3c.dom.Node;
 
 public class ScreenLoader {
 	private static JFrame workingFrame = null;
-	private static Document workingDoc = null;
 	private static Document dom = null;
 
 	public static void loadScreenByID(String id) {
-		workingFrame = LogixMain.screen;
+		workingFrame = LogixMain.screen; 
 		dom = ScreenUtil.getDOMByID(id);
 		recursiveCheck((Node) (dom));
 		workingFrame.repaint();
@@ -28,7 +27,7 @@ public class ScreenLoader {
 		if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
 			Element e = (Element) node;
 			SNodeInfo info = SNodeInfo.read(e);
-			if (info == null) {
+			if (info == null || info.type == SNodeInfo.UNKNOWN) {
 				return;
 			}
 			setupNode(info);
