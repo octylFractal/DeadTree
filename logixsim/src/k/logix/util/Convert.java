@@ -1,6 +1,8 @@
 package k.logix.util;
 
 import java.awt.Component;
+import java.awt.GridBagLayout;
+import java.awt.LayoutManager;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -10,6 +12,7 @@ import k.logix.main.BuildAreaFactory;
 import k.logix.xml.SNodeInfo;
 
 public class Convert {
+	public static LayoutManager manager = new GridBagLayout();
 
 	public static Component infoToComp(SNodeInfo info) {
 		Component c = null;
@@ -18,10 +21,13 @@ public class Convert {
 			c = new JButton(info.name);
 			break;
 		case SNodeInfo.SCREEN:
-			c = new JPanel(true);
+			c = new JPanel(manager, true);
 			break;
 		case SNodeInfo.BUILD_AREA:
 			c = BuildAreaFactory.newBuild(info);
+			break;
+		case SNodeInfo.TITLE:
+			c = new JLabel(info.text);
 			break;
 		case SNodeInfo.UNKNOWN:
 			c = new JLabel(
@@ -33,8 +39,9 @@ public class Convert {
 			break;
 		default:
 			c = null;
-			break;
+			return c;
 		}
+		c.setName(info.name);
 		return c;
 	}
 

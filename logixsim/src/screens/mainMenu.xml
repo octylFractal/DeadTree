@@ -1,3 +1,4 @@
-<screen id="mainMenu" width="800" height="600">
-<name center="h" y="20">Main Menu</name>
+<screen id="mainMenu" width="800" height="600" center="hv">
+<title center="h" y="20">Main Menu</title>
+<button center="hv" name="Start"></button>
 </screen>
