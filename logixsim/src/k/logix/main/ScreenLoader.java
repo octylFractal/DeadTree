@@ -1,6 +1,7 @@
 package k.logix.main;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -24,7 +25,6 @@ public class ScreenLoader {
 		dom = ScreenUtil.getDOMByID(id);
 		recursiveCheck((Node) (dom));
 		workingContainer.repaint();
-		workingContainer.pack();
 		workingContainer.setVisible(true);
 	}
 
@@ -54,6 +54,11 @@ public class ScreenLoader {
 			workingContainer.add(c);
 			if (c instanceof JPanel) {
 				secondaryContainer = (JPanel) c;
+				Dimension dim = new Dimension(info.width, info.height);
+				workingContainer.setPreferredSize(dim);
+				secondaryContainer.setPreferredSize(dim);
+				workingContainer.setSize(dim);
+				secondaryContainer.setSize(dim);
 			}
 		}
 		position(c, info);

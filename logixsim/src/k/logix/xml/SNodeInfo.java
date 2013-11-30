@@ -1,6 +1,8 @@
 package k.logix.xml;
 
 import java.awt.Toolkit;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +55,7 @@ public class SNodeInfo {
 		if (atts[5].indexOf('v') != -1) {
 			ni.y = (h / 2) - (ni.height / 2);
 		}
-		if (!atts[7].equals("")) {
+		if (atts[7].equals("true")) {
 			ni.helperNode(node);
 		}
 		infos.add(ni);
@@ -62,15 +64,41 @@ public class SNodeInfo {
 
 	private void helperNode(Element node) {
 		SNodeInfo info = getInfoByElement(node.getParentNode());
-		info.boundings = readBoundingData(this);
+		try {
+			info.boundings = readBoundingData(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("A fatal error has occured while loading "
+					+ info.name + ".");
+			System.exit(1);
+		}
 	}
 
-	private Object readBoundingData(SNodeInfo info) {
-		String bound = info.name;
-		if (bound.equals("gridbag")) {
-
+	@SuppressWarnings("rawtypes")
+	private Object readBoundingData(SNodeInfo info) throws Exception {
+		Element e = info.base;
+		String bcls = e.getAttribute("package") + "." + e.getNodeName();
+		Class boundingc = Class.forName(bcls);
+		Object inst = boundingc.newInstance();
+		Method[] mlist = boundingc.getDeclaredMethods();
+		Field[] flist = boundingc.getDeclaredFields();
+		for (Field f : flist) {
+			f.setAccessible(true);
+			f.set(inst, cast(e.getAttribute(f.getName()), f));
 		}
-		return null;
+		for (Method m : mlist) {
+			m.setAccessible(true);
+			Node n = e.getAttributes().getNamedItem(m.getName());
+			if (n != null) {
+				m.invoke(inst, ((Object[]) n.getNodeValue().split(":")));
+			}
+		}
+		return inst;
+	}
+
+	private Object cast(String attribute, Field f) {
+		Class<?> type = f.getType();
+		return type.cast(attribute);
 	}
 
 	private static SNodeInfo getInfoByElement(Node parentNode) {
