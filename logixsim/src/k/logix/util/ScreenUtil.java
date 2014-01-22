@@ -44,6 +44,10 @@ public class ScreenUtil {
 		}
 		currentlyInit = false;
 	}
+	
+	static {
+		init();
+	}
 
 	private static String getID(Document d) {
 		String id = ((Element) d.getElementsByTagName("screen").item(0))
@@ -52,7 +56,6 @@ public class ScreenUtil {
 	}
 
 	public static Document loadDocument(File dom) throws Exception {
-		init();
 		Document doc = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder().parse(dom);
 		doc.normalizeDocument();
@@ -60,7 +63,6 @@ public class ScreenUtil {
 	}
 
 	public static Document getDOMByID(String id) {
-		init();
 		return idToDOM.get(id);
 	}
 
