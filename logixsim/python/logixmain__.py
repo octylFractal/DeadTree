@@ -28,4 +28,3 @@ Wire the gate's outputs to the given outputs
 def wireGateToOutputs(gate, outputs) :
     for i in range(0, len(outputs)) :
         connect(gate.output[i], outputs[i])
-
