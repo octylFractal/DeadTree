@@ -6,3 +6,7 @@
 # Package Files #
 *.war
 *.ear
+
+# Python Compiled Files #
+
+.pyc
