@@ -76,11 +76,10 @@ public class SNodeInfo {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private Object readBoundingData(SNodeInfo info) throws Exception {
 		Element e = info.base;
 		String bcls = e.getAttribute("package") + "." + e.getNodeName();
-		Class boundingc = Class.forName(bcls);
+		Class<?> boundingc = Class.forName(bcls);
 		Object inst = boundingc.newInstance();
 		Method[] mlist = boundingc.getDeclaredMethods();
 		NamedNodeMap map = e.getAttributes();
