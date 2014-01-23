@@ -35,7 +35,7 @@ public class Convert {
 							+ info.base.getNodeName()
 							+ ".\n"
 							+ "Please report this error to the developer of the mod pack"
-							+ "(the developer if you have not added any mod packs)");
+							+ " (the developer if you have not added any mod packs)");
 			break;
 		default:
 			c = null;
