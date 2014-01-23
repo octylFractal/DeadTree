@@ -9,7 +9,9 @@ import java.util.List;
 
 import k.logix.util.Safe;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class SNodeInfo {
@@ -81,10 +83,16 @@ public class SNodeInfo {
 		Class boundingc = Class.forName(bcls);
 		Object inst = boundingc.newInstance();
 		Method[] mlist = boundingc.getDeclaredMethods();
-		Field[] flist = boundingc.getDeclaredFields();
-		for (Field f : flist) {
-			f.setAccessible(true);
-			f.set(inst, cast(e.getAttribute(f.getName()), f));
+		NamedNodeMap map = e.getAttributes();
+		NamedNodeMapIter iter = new NamedNodeMapIter(map);
+		for (Node n : iter) {
+			Attr a = (Attr) n;
+			Field f = boundingc.getDeclaredField(a.getName());
+			if (f == null) {
+				System.err.println("Warning: unknown field for " + n);
+			} else {
+				f.set(inst, transform(a.getValue(), f));
+			}
 		}
 		for (Method m : mlist) {
 			m.setAccessible(true);
@@ -96,7 +104,7 @@ public class SNodeInfo {
 		return inst;
 	}
 
-	private Object cast(String attribute, Field f) {
+	private Object transform(String attribute, Field f) {
 		Class<?> type = f.getType();
 		return type.cast(attribute);
 	}
