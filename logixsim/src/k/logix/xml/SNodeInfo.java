@@ -106,7 +106,13 @@ public class SNodeInfo {
 
 	private Object transform(String attribute, Field f) {
 		Class<?> type = f.getType();
-		return type.cast(attribute);
+		if (type == String.class) {
+			return attribute;
+		} else if (type == int.class || type == Integer.class) {
+			return Integer.parseInt(attribute);
+		}
+		throw new UnsupportedOperationException(
+				"Doesn't support non-Strings/ints yet.");
 	}
 
 	private static SNodeInfo getInfoByElement(Node parentNode) {
