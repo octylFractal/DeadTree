@@ -33,7 +33,6 @@ public class Test {
     private static int loadedID = LOADINGSCREEN;
 
     static {
-        center.anchor = GridBagConstraints.CENTER;
         center.ipady = center.ipadx = 10;
         welcome.setFont(SwingAWTUtils.getDefaultModdedFont(welcome, Font.BOLD
                 | Font.ITALIC, 36));
