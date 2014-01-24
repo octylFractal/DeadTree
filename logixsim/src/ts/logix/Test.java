@@ -27,6 +27,7 @@ public class Test {
             "Load logixsys..."), quit_mm_button = new JClickableText(
             "Quit logixsim...");
     private static GridBagConstraints center = new GridBagConstraints();
+    private static int loadedID;
 
     static {
         center.anchor = GridBagConstraints.CENTER;
@@ -75,16 +76,19 @@ public class Test {
     }
 
     protected static void change_gui(int id) {
+        SwingAWTUtils.removeAll(pane);
         if (id == MAINMENU) {
-            SwingAWTUtils.removeAll(pane);
             GridBagConstraints proxy = (GridBagConstraints) center.clone();
             pane.add(new_mm_button, nextY(proxy));
             pane.add(load_mm_button, nextY(proxy));
             pane.add(quit_mm_button, nextY(proxy));
-            SwingAWTUtils.validate(pane);
         } else {
             System.err.println("Skipping id " + id);
+            change_gui(loadedID);
+            return;
         }
+        SwingAWTUtils.validate(pane);
+        loadedID = id;
     }
 
     private static void display_init() {
