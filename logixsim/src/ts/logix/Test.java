@@ -76,6 +76,9 @@ public class Test {
     }
 
     protected static void change_gui(int id) {
+        if (id == 0) {
+            return;
+        }
         SwingAWTUtils.removeAll(pane);
         if (id == MAINMENU) {
             GridBagConstraints proxy = (GridBagConstraints) center.clone();
