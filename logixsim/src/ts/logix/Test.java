@@ -18,7 +18,8 @@ import k.core.util.gui.SwingAWTUtils;
 @SuppressWarnings("serial")
 public class Test {
 
-    protected static final int MAINMENU = 0x01, NEWSYS = 0x02, LOADSYS = 0x03;
+    protected static final int LOADINGSCREEN = 0x00, MAINMENU = 0x01,
+            NEWSYS = 0x02, LOADSYS = 0x03;
     private static JFrame frame;
     private static JPanel pane = new JPanel(new GridBagLayout());
     private static JClickableText welcome = new JClickableText(
@@ -27,7 +28,7 @@ public class Test {
             "Load logixsys..."), quit_mm_button = new JClickableText(
             "Quit logixsim...");
     private static GridBagConstraints center = new GridBagConstraints();
-    private static int loadedID;
+    private static int loadedID = LOADINGSCREEN;
 
     static {
         center.anchor = GridBagConstraints.CENTER;
@@ -76,15 +77,14 @@ public class Test {
     }
 
     protected static void change_gui(int id) {
-        if (id == 0) {
-            return;
-        }
         SwingAWTUtils.removeAll(pane);
         if (id == MAINMENU) {
             GridBagConstraints proxy = (GridBagConstraints) center.clone();
             pane.add(new_mm_button, nextY(proxy));
             pane.add(load_mm_button, nextY(proxy));
             pane.add(quit_mm_button, nextY(proxy));
+        } else if (id == LOADINGSCREEN) {
+            pane.add(welcome, center);
         } else {
             System.err.println("Skipping id " + id);
             change_gui(loadedID);
@@ -106,8 +106,8 @@ public class Test {
     }
 
     private static void visual_setup() {
-        pane.add(welcome, center);
         frame.add(pane);
+        change_gui(LOADINGSCREEN);
     }
 
     public static GridBagConstraints nextX(GridBagConstraints gbc) {
