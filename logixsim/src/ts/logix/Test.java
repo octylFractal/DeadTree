@@ -31,8 +31,10 @@ public class Test {
     static {
         center.anchor = GridBagConstraints.CENTER;
         center.ipady = center.ipadx = 10;
-        welcome.setFont(new Font("Dialog", Font.ITALIC | Font.BOLD, 36));
-        Font menu = new Font("Dialog", Font.BOLD, 24);
+        welcome.setFont(SwingAWTUtils.getDefaultModdedFont(welcome, Font.BOLD
+                | Font.ITALIC, 36));
+        Font menu = SwingAWTUtils.getDefaultModdedFont(new_mm_button,
+                Font.BOLD, 24);
         new_mm_button.setFont(menu);
         load_mm_button.setFont(menu);
         quit_mm_button.setFont(menu);
