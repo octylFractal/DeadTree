@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -20,8 +21,9 @@ public class Test {
 
     protected static final int LOADINGSCREEN = 0x00, MAINMENU = 0x01,
             NEWSYS = 0x02, LOADSYS = 0x03;
+    private static final LayoutManager DEFAULT_MANAGER = new GridBagLayout();
     private static JFrame frame;
-    private static JPanel pane = new JPanel(new GridBagLayout());
+    private static JPanel pane = new JPanel();
     private static JClickableText welcome = new JClickableText(
             "Welcome to LogixSim!"), new_mm_button = new JClickableText(
             "New logixsys..."), load_mm_button = new JClickableText(
@@ -78,11 +80,13 @@ public class Test {
 
     protected static void change_gui(int id) {
         SwingAWTUtils.removeAll(pane);
+        pane.setLayout(DEFAULT_MANAGER);
         if (id == MAINMENU) {
             GridBagConstraints proxy = (GridBagConstraints) center.clone();
             pane.add(new_mm_button, nextY(proxy));
             pane.add(load_mm_button, nextY(proxy));
             pane.add(quit_mm_button, nextY(proxy));
+        } else if (id == NEWSYS) {
         } else if (id == LOADINGSCREEN) {
             pane.add(welcome, center);
         } else {
