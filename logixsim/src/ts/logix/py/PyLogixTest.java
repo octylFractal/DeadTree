@@ -8,6 +8,9 @@ public class PyLogixTest {
         PyPoint one = new PyPoint(), two = new PyPoint();
         one.markConnection(two, true);
         System.err.println(one.isConnected(two));
+        System.err.println(one.state() + "=" + two.state());
+        one.pushState(true);
+        System.err.println(one.state() + "=" + two.state());
     }
 
 }

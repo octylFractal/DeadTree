@@ -6,6 +6,7 @@ import k.core.util.jythonintegration.JythonIntergration;
 
 import org.python.core.PyBoolean;
 import org.python.core.PyObject;
+import org.python.core.PyString;
 
 public class pointsys {
     public static final JythonFile file = JythonIntergration
@@ -13,6 +14,7 @@ public class pointsys {
 
     public static class PyPoint {
         public static final JythonClass jc = file.getJClass("Point");
+        private static final PyString state = new PyString("state");
         public PyObject obj = null;
 
         public PyPoint() {
@@ -31,6 +33,10 @@ public class pointsys {
 
         public void pushState(boolean state) {
             jc.invokeMethod("pushState", obj, new PyBoolean(state));
+        }
+
+        public boolean state() {
+            return Boolean.parseBoolean(obj.__getattr__(state).toString());
         }
 
         @Override
