@@ -4,14 +4,41 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * The matching Python file is named pointsys.py.
+ * 
+ * @author Kenzie Togami
+ */
 public class PointSys {
+    /**
+     * The map of a {@link PyPoint} to a list of connections.
+     */
     protected static final HashMap<PyPoint, List<PyPoint>> connections = new HashMap<PyPoint, List<PyPoint>>();
+    /**
+     * The next point id.
+     */
     private static int nextId = 0;
 
+    /**
+     * Puts the connection list in the map of connections under the given point.
+     * 
+     * @param point
+     *            - the 'key'
+     * @param connList
+     *            - the 'value'
+     */
     public static void writeConnection(PyPoint point, List<PyPoint> connList) {
         connections.put(point, connList);
     }
 
+    /**
+     * Creates a new connection <tt>from -> to</tt>
+     * 
+     * @param from
+     *            - the point to connect from
+     * @param to
+     *            - the point to connect to
+     */
     public static void addConnection(PyPoint from, PyPoint to) {
         List<PyPoint> cl = connections.get(from);
         if (cl.contains(to)) {
@@ -22,10 +49,24 @@ public class PointSys {
         to.pushState(from.state);
     }
 
+    /**
+     * Removes the connection <tt>from -> to</tt>
+     * 
+     * @param from
+     *            - the point to disconnect from <tt>to</tt>
+     * @param to
+     *            - the point to disconnect from
+     */
     public static void remConnection(PyPoint from, PyPoint to) {
         connections.get(from).remove(to);
     }
 
+    /**
+     * A class that provides different connectable points that can be used to
+     * perform logic.
+     * 
+     * @author Kenzie Togami
+     */
     public static class PyPoint {
         protected boolean state = false;
         protected int id = 0;
