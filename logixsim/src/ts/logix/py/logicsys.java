@@ -76,7 +76,7 @@ public class logicsys {
                 int outputs) {
             gclass = gCls;
             try {
-                constr = gCls.getConstructor(Integer.class, Integer.class);
+                constr = gCls.getDeclaredConstructor(int.class, int.class);
             } catch (Exception e) {
                 if (e instanceof RuntimeException) {
                     throw (RuntimeException) e;
