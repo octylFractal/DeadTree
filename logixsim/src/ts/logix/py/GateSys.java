@@ -118,6 +118,10 @@ public class GateSys {
          */
         public Gate build() {
             GateInfo gi = gates.get(gid);
+            if (icount < 1 || ocount < 1) {
+                throw new IndexOutOfBoundsException(
+                        "input/output count must be greater than 0");
+            }
             if (gi.icount != VARIABLE_COUNT && icount != gi.icount) {
                 throw new IllegalStateException("Input counts do not match.");
             }
