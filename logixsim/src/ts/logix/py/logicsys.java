@@ -66,7 +66,7 @@ public class logicsys {
         }
     }
 
-    public static class GateInfo {
+    private static class GateInfo {
         private Class<? extends Gate> gclass = null;
         private Constructor<? extends Gate> constr = null;
         private String gid = "";
@@ -125,7 +125,7 @@ public class logicsys {
         }
     }
 
-    public static class AndGate extends Gate {
+    private static class AndGate extends Gate {
 
         protected AndGate(int ins, int outs) {
             super(ins, outs);
@@ -141,7 +141,7 @@ public class logicsys {
         }
     }
 
-    public static class OrGate extends Gate {
+    private static class OrGate extends Gate {
 
         protected OrGate(int ins, int outs) {
             super(ins, outs);
