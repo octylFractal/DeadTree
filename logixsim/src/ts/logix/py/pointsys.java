@@ -29,6 +29,10 @@ public class pointsys {
                     p2.obj).toString());
         }
 
+        public void pushState(boolean state) {
+            jc.invokeMethod("pushState", obj, new PyBoolean(state));
+        }
+
         @Override
         public String toString() {
             return obj.__repr__().toString();
