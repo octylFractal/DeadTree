@@ -2,11 +2,11 @@ package ts.logix.py;
 
 import java.util.List;
 
-import ts.logix.py.logicsys.Gate;
-import ts.logix.py.pointsys.PyPoint;
+import ts.logix.py.GateSys.Gate;
+import ts.logix.py.PointSys.PyPoint;
 
-public class logixmain__ {
-    private logixmain__() {
+public class LogixUtil {
+    private LogixUtil() {
     }
 
     public static void connect(PyPoint p1, PyPoint p2) {

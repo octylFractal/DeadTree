@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class pointsys {
+public class PointSys {
     protected static final HashMap<PyPoint, List<PyPoint>> connections = new HashMap<PyPoint, List<PyPoint>>();
     private static int nextId = 0;
 
@@ -54,7 +54,7 @@ public class pointsys {
          */
         public void pushState(boolean state) {
             this.state = state;
-            List<PyPoint> dup = new ArrayList<pointsys.PyPoint>(
+            List<PyPoint> dup = new ArrayList<PointSys.PyPoint>(
                     connections.get(this));
             for (PyPoint connection : dup) {
                 connection.pushState(state);

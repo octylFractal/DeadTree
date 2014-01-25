@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import ts.logix.py.pointsys.PyPoint;
+import ts.logix.py.PointSys.PyPoint;
 
-public class logicsys {
+public class GateSys {
 
     /**
      * Indicates that a gate uses a varying amount of inputs/outputs.
