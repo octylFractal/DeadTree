@@ -68,15 +68,36 @@ public class PointSys {
      * @author Kenzie Togami
      */
     public static class PyPoint {
+        /**
+         * The state of this point, either {@link State#ON} or {@link State#OFF}
+         * .
+         */
         protected boolean state = false;
+        /**
+         * The id of this point.
+         */
         protected int id = 0;
 
+        /**
+         * Creates a new point with the next available id and state set to
+         * {@link State#OFF}.
+         */
         public PyPoint() {
             id = nextId++;
             state = State.OFF;
             writeConnection(this, new ArrayList<PyPoint>());
         }
 
+        /**
+         * Creates or deletes a connection from <tt>this</tt> to <tt>p2</tt>.
+         * 
+         * @param p2
+         *            - the point to (dis)connect to.
+         * @param connected
+         *            - if this is a connection or disconnection
+         * @see State#CONNECTED
+         * @see State#DISCONNECTED
+         */
         public void markConnection(PyPoint p2, boolean connected) {
             if (connected) {
                 addConnection(this, p2);
@@ -85,13 +106,27 @@ public class PointSys {
             }
         }
 
+        /**
+         * Returns {@link State#CONNECTED} if this is connected, or
+         * {@link State#DISCONNECTED} if it is not.
+         * 
+         * @param p2
+         *            - the point to check against
+         * @return {@link State#CONNECTED} or {@link State#DISCONNECTED}
+         */
         public boolean isConnected(PyPoint p2) {
             return connections.get(this).contains(p2);
         }
 
         /**
-         * WARNING: If connections are two-way, this goes recursive and causes a
-         * {@link StackOverflowError}.
+         * Pushes <tt>state</tt> to this point and all it's connections.
+         * Recursive.<br>
+         * <br>
+         * WARNING: If connections are two-way, this goes over the same point
+         * repeatedly and causes a {@link StackOverflowError}.
+         * 
+         * @param state
+         *            - {@link State#ON} or {@link State#OFF}.
          */
         public void pushState(boolean state) {
             this.state = state;
@@ -102,14 +137,31 @@ public class PointSys {
             }
         }
 
+        /**
+         * Returns the state of this point
+         * 
+         * @return {@link #state}
+         */
         public boolean state() {
             return state;
         }
 
+        /**
+         * Returns the id of this point
+         * 
+         * @return {@link #id}
+         */
         public int id() {
             return id;
         }
 
+        /**
+         * Returns this point as a string, including it's id, state, and
+         * connection list.<br>
+         * <br>
+         * WARNING: If connections are two-way, this goes over the same point
+         * repeatedly and causes a {@link StackOverflowError}.
+         */
         @Override
         public String toString() {
             return "(point" + id + ": state:" + Conversion.getStateAsStr(state)
