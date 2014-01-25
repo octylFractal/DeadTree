@@ -1,6 +1,7 @@
 package ts.logix.file;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 public class LogixSystem {
     public static final String fileext = "lsys";
@@ -17,9 +18,15 @@ public class LogixSystem {
      *            - the directory to save to
      */
     public void save(File dir) {
-        File save = new File(dir, id + fileext);
+        try {
+            File save = new File(dir, id + fileext);
+            FileOutputStream fos = new FileOutputStream(save);
+            fos.write(toString().getBytes());
+            fos.close();
+        } catch (Exception e) {
+        }
     }
-    
+
     @Override
     public String toString() {
         return id;
