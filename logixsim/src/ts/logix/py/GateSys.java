@@ -19,6 +19,10 @@ public class GateSys {
      */
     public static final int VARIABLE_COUNT = -1;
 
+    public static final String AND_GATEID = "andGate";
+
+    public static final String OR_GATEID = "orGate";
+
     /**
      * The map of ids to {@link GateInfo}.
      */
@@ -323,7 +327,7 @@ public class GateSys {
 
     static {
         // this adds the default gates.
-        addGate(AndGate.class, "andGate", VARIABLE_COUNT, 1);
-        addGate(OrGate.class, "orGate", VARIABLE_COUNT, 1);
+        addGate(AndGate.class, AND_GATEID, VARIABLE_COUNT, 1);
+        addGate(OrGate.class, OR_GATEID, VARIABLE_COUNT, 1);
     }
 }
