@@ -1,10 +1,13 @@
 package ts.logix.py;
 
+import java.util.List;
+
 import k.core.util.jythonintegration.JythonClass;
 import k.core.util.jythonintegration.JythonFile;
 import k.core.util.jythonintegration.JythonIntergration;
 
 import org.python.core.PyBoolean;
+import org.python.core.PyList;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 
@@ -43,5 +46,18 @@ public class pointsys {
         public String toString() {
             return obj.__repr__().toString();
         }
+    }
+
+    public static void writeConnection(PyPoint p1, List<PyPoint> connList) {
+        PyList list = new PyList(connList);
+        file.invokeMethod("writeConnection", p1.obj, list);
+    }
+
+    public static void addConnection(PyPoint p1, PyPoint p2) {
+        file.invokeMethod("addConnection", p1.obj, p2.obj);
+    }
+
+    public static void remConnection(PyPoint p1, PyPoint p2) {
+        file.invokeMethod("remConnection", p1.obj, p2.obj);
     }
 }
