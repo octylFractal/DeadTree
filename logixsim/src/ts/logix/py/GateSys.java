@@ -19,8 +19,14 @@ public class GateSys {
      */
     public static final int VARIABLE_COUNT = -1;
 
+    /**
+     * The gate id for an AND gate.
+     */
     public static final String AND_GATEID = "andGate";
 
+    /**
+     * The gate id for an OR gate.
+     */
     public static final String OR_GATEID = "orGate";
 
     /**
