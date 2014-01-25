@@ -1,63 +1,78 @@
 package ts.logix.py;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import k.core.util.jythonintegration.JythonClass;
-import k.core.util.jythonintegration.JythonFile;
-import k.core.util.jythonintegration.JythonIntergration;
-
-import org.python.core.PyBoolean;
-import org.python.core.PyList;
-import org.python.core.PyObject;
-import org.python.core.PyString;
-
 public class pointsys {
-    public static final JythonFile file = JythonIntergration
-            .getFile("./python/pointsys.py");
+    protected static final HashMap<PyPoint, List<PyPoint>> connections = new HashMap<PyPoint, List<PyPoint>>();
+    private static int nextId = 0;
+
+    public static void writeConnection(PyPoint point, List<PyPoint> connList) {
+        connections.put(point, connList);
+    }
+
+    public static void addConnection(PyPoint from, PyPoint to) {
+        List<PyPoint> cl = connections.get(from);
+        if (cl.contains(to)) {
+            System.err.println("Skipping already connected point " + to + ".");
+            return;
+        }
+        cl.add(to);
+        to.pushState(from.state);
+    }
+
+    public static void remConnection(PyPoint from, PyPoint to) {
+        connections.get(from).remove(to);
+    }
 
     public static class PyPoint {
-        public static final JythonClass jc = file.getJClass("Point");
-        private static final PyString state = new PyString("state");
-        public PyObject obj = null;
+        protected boolean state = false;
+        protected int id = 0;
 
         public PyPoint() {
-            obj = jc.newInstance();
+            id = nextId++;
+            state = State.OFF;
+            writeConnection(this, new ArrayList<PyPoint>());
         }
 
         public void markConnection(PyPoint p2, boolean connected) {
-            jc.invokeMethod("markConnection", obj, p2.obj, new PyBoolean(
-                    connected));
+            if (connected) {
+                addConnection(this, p2);
+            } else {
+                remConnection(this, p2);
+            }
         }
 
         public boolean isConnected(PyPoint p2) {
-            return Boolean.parseBoolean(jc.invokeMethod("isConnected", obj,
-                    p2.obj).toString());
+            return connections.get(this).contains(p2);
         }
 
+        /**
+         * WARNING: If connections are two-way, this goes recursive and causes a
+         * {@link StackOverflowError}.
+         */
         public void pushState(boolean state) {
-            jc.invokeMethod("pushState", obj, new PyBoolean(state));
+            this.state = state;
+            List<PyPoint> dup = new ArrayList<pointsys.PyPoint>(
+                    connections.get(this));
+            for (PyPoint connection : dup) {
+                connection.pushState(state);
+            }
         }
 
         public boolean state() {
-            return Boolean.parseBoolean(obj.__getattr__(state).toString());
+            return state;
+        }
+
+        public int id() {
+            return id;
         }
 
         @Override
         public String toString() {
-            return obj.__repr__().toString();
+            return "(point" + id + ": state:" + Conversion.getStateAsStr(state)
+                    + "; conns:" + connections.get(this) + ")";
         }
-    }
-
-    public static void writeConnection(PyPoint p1, List<PyPoint> connList) {
-        PyList list = new PyList(connList);
-        file.invokeMethod("writeConnection", p1.obj, list);
-    }
-
-    public static void addConnection(PyPoint p1, PyPoint p2) {
-        file.invokeMethod("addConnection", p1.obj, p2.obj);
-    }
-
-    public static void remConnection(PyPoint p1, PyPoint p2) {
-        file.invokeMethod("remConnection", p1.obj, p2.obj);
     }
 }

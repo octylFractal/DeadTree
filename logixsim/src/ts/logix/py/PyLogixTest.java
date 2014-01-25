@@ -6,10 +6,10 @@ public class PyLogixTest {
 
     public static void main(String[] args) {
         PyPoint one = new PyPoint(), two = new PyPoint();
-        one.markConnection(two, true);
+        logixmain__.connect(one, two);
         System.err.println(one.isConnected(two));
         System.err.println(one.state() + "=" + two.state());
-        one.pushState(true);
+        one.pushState(State.ON);
         System.err.println(one.state() + "=" + two.state());
     }
 
