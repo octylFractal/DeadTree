@@ -12,6 +12,10 @@ public class logixmain__ {
     public static void connect(PyPoint p1, PyPoint p2) {
         p1.markConnection(p2, State.CONNECTED);
     }
+    
+    public static void disconnect(PyPoint p1, PyPoint p2) {
+        p1.markConnection(p2, State.DISCONNECTED);
+    }
 
     public static void wireInputsToGate(List<PyPoint> inputs, Gate g) {
         for (int i = 0; i < inputs.size(); i++) {
