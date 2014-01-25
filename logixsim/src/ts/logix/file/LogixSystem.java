@@ -24,12 +24,18 @@ public class LogixSystem {
             fos.write(toString().getBytes());
             fos.close();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public String toString() {
         return id;
+    }
+
+    public static LogixSystem load(File save) {
+        LogixSystem ls = new LogixSystem(save.getName().replace(fileext, ""));
+        return ls;
     }
 
 }
