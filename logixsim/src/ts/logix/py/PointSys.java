@@ -1,6 +1,7 @@
 package ts.logix.py;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class PointSys {
      * @return the connections for the given point
      */
     public static List<PyPoint> readConnection(PyPoint point) {
-        return connections.get(point);
+        return Collections.unmodifiableList(connections.get(point));
     }
 
     /**
