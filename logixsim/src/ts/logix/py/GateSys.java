@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ts.logix.interfaces.GridObject;
 import ts.logix.py.PointSys.PyPoint;
 
 /**
@@ -217,7 +218,7 @@ public class GateSys {
      * 
      * @author Kenzie Togami
      */
-    public static abstract class Gate {
+    public static abstract class Gate implements GridObject {
         /**
          * The inputs/outputs in this Gate.
          */

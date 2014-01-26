@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ts.logix.interfaces.GridObject;
+
 /**
  * The matching Python file is named pointsys.py.
  * 
@@ -67,7 +69,7 @@ public class PointSys {
      * 
      * @author Kenzie Togami
      */
-    public static class PyPoint {
+    public static class PyPoint implements GridObject {
         /**
          * The state of this point, either {@link State#ON} or {@link State#OFF}
          * .
