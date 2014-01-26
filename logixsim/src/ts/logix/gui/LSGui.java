@@ -68,6 +68,7 @@ public class LSGui {
     private static void gui_ls(LogixSystem ls) {
         JPanel p = Test.pane;
         SwingAWTUtils.removeAll(p);
+        SwingAWTUtils.validate(p);
     }
 
     private static void returnToMenu() {
