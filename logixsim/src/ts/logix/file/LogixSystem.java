@@ -2,16 +2,15 @@ package ts.logix.file;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-import ts.logix.interfaces.GridObject;
-import ts.logix.py.GateSys;
-import ts.logix.py.GateSys.Gate;
-import ts.logix.py.LogixUtil;
-import ts.logix.py.PointSys.PyPoint;
+import ts.logix.interfaces.Positionable;
 
 public class LogixSystem {
     public static final String fileext = "lsys";
     private String id = "";
+    public List<Positionable> objs = new ArrayList<Positionable>();
 
     public LogixSystem(String name) {
         id = name;
