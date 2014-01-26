@@ -34,6 +34,17 @@ public class PointSys {
     }
 
     /**
+     * Gets the connection list in the map of connections under the given point.
+     * 
+     * @param point
+     *            - the 'key'
+     * @return the connections for the given point
+     */
+    public static List<PyPoint> readConnection(PyPoint point) {
+        return connections.get(point);
+    }
+
+    /**
      * Creates a new connection <tt>from -> to</tt>
      * 
      * @param from
