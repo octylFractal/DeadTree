@@ -7,10 +7,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import ts.logix.gui.LSGui;
 
 import k.core.util.Helper;
 import k.core.util.gui.JClickableText;
@@ -19,7 +23,7 @@ import k.core.util.gui.SwingAWTUtils;
 @SuppressWarnings("serial")
 public class Test {
 
-    protected static final int LOADINGSCREEN = 0x00, MAINMENU = 0x01,
+    public static final int LOADINGSCREEN = 0x00, MAINMENU = 0x01,
             NEWSYS = 0x02, LOADSYS = 0x03;
     private static final LayoutManager DEFAULT_MANAGER = new GridBagLayout();
     private static JFrame frame;
@@ -75,9 +79,10 @@ public class Test {
         args = Helper.ProgramProps.normalizeCommandArgs(args);
         Helper.ProgramProps.acceptAll(args);
         display_init();
+        LSGui.keepMain();
     }
 
-    protected static void change_gui(int id) {
+    public static void change_gui(int id) {
         SwingAWTUtils.removeAll(pane);
         pane.setLayout(DEFAULT_MANAGER);
         if (id == MAINMENU) {
@@ -86,6 +91,7 @@ public class Test {
             pane.add(load_mm_button, nextY(proxy));
             pane.add(quit_mm_button, nextY(proxy));
         } else if (id == NEWSYS) {
+            handoffControl(true);
         } else if (id == LOADINGSCREEN) {
             pane.add(welcome, center);
         } else {
@@ -97,10 +103,21 @@ public class Test {
         loadedID = id;
     }
 
+    private static void handoffControl(boolean newLS) {
+        LSGui.begin(newLS);
+    }
+
     private static void display_init() {
         frame = new JFrame("logixsim");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setMinimumSize(new Dimension(800, 600));
+        frame.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                LSGui.close();
+            }
+        });
         visual_setup();
         frame.pack();
         SwingAWTUtils.drop(frame);
