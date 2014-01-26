@@ -25,16 +25,16 @@ public class Test {
 
     public static final int LOADINGSCREEN = 0x00, MAINMENU = 0x01,
             NEWSYS = 0x02, LOADSYS = 0x03;
-    private static final LayoutManager DEFAULT_MANAGER = new GridBagLayout();
-    private static JFrame frame;
-    private static JPanel pane = new JPanel();
-    private static JClickableText welcome = new JClickableText(
+    public static final LayoutManager DEFAULT_MANAGER = new GridBagLayout();
+    public static JFrame frame;
+    public static JPanel pane = new JPanel();
+    public static JClickableText welcome = new JClickableText(
             "Welcome to LogixSim!"), new_mm_button = new JClickableText(
             "New logixsys..."), load_mm_button = new JClickableText(
             "Load logixsys..."), quit_mm_button = new JClickableText(
             "Quit logixsim...");
-    private static GridBagConstraints center = new GridBagConstraints();
-    private static int loadedID = LOADINGSCREEN;
+    public static GridBagConstraints center = new GridBagConstraints();
+    public static int loadedID = LOADINGSCREEN;
 
     static {
         center.ipady = center.ipadx = 10;
@@ -92,6 +92,8 @@ public class Test {
             pane.add(quit_mm_button, nextY(proxy));
         } else if (id == NEWSYS) {
             handoffControl(true);
+        } else if (id == LOADSYS) {
+            handoffControl(false);
         } else if (id == LOADINGSCREEN) {
             pane.add(welcome, center);
         } else {

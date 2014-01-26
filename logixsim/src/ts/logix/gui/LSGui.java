@@ -4,6 +4,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -35,6 +36,17 @@ public class LSGui {
                 return;
             }
             system.set(new LogixSystem(name));
+        } else {
+            JFileChooser jfc = new JFileChooser();
+            if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                system.set(LogixSystem.load(jfc.getSelectedFile()));
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "You didn't pick a file, returning to main menu.",
+                        "logixsys", JOptionPane.INFORMATION_MESSAGE, null);
+                returnToMenu();
+                return;
+            }
         }
         run.release();
     }

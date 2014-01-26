@@ -8,12 +8,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import k.core.util.Helper.BetterArrays;
 import k.core.util.netty.DataStruct;
 import ts.logix.interfaces.Positionable;
 
 public class LogixSystem {
     public static final String fileext = "lsys";
+    public static final FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            "logixsim Files", fileext);
     private String id = "";
     public List<Positionable> objs = new ArrayList<Positionable>();
 
