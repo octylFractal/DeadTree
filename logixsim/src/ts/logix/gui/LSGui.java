@@ -1,11 +1,13 @@
 package ts.logix.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,6 +21,28 @@ import ts.logix.positionables.PPyPoint;
 import ts.logix.py.PointSys;
 
 public class LSGui {
+    public static class JCircuitArea extends JComponent {
+        private static final long serialVersionUID = 1L;
+        private LogixSystem ls;
+
+        public JCircuitArea(Dimension size, LogixSystem sim) {
+            setMinimumSize(size);
+            setPreferredSize(getMinimumSize());
+            setSize(getPreferredSize());
+            ls = sim;
+        }
+
+        @Override
+        public void paint(Graphics g) {
+            g.setColor(getBackground());
+            g.clearRect(0, 0, getWidth(), getHeight());
+            for (Positionable p : ls.objs) {
+                drawPos(g, p);
+            }
+        }
+
+    }
+
     private static Semaphore run = new Semaphore(1);
     private static ReentrantLock fake = new ReentrantLock();
     private static AtomicReference<LogixSystem> system = new AtomicReference<LogixSystem>();
@@ -65,44 +89,30 @@ public class LSGui {
             if (fake.isLocked()) {
                 continue;
             }
-            LogixSystem ls = system.get();
+            final LogixSystem ls = system.get();
             if (ls != null) {
-                gui_ls(ls);
+                try {
+                    SwingAWTUtils.runOnDispatch(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            gui_ls(ls);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
-    @SuppressWarnings("serial")
-    private static void gui_ls(final LogixSystem ls) {
-        final JPanel p = Test.pane;
-        SwingAWTUtils.removeAll(p);
-        p.setSize(Test.frame.getSize());
-        System.err.println(p.getSize());
-        p.add(new JPanel() {
-            {
-                setMinimumSize(p.getSize());
-                setSize(getMinimumSize());
-                setVisible(true);
-            }
-
-            @Override
-            public void paint(Graphics g) {
-                super.paint(g);
-                Graphics g2 = g.create();
-                g2.setColor(getBackground());
-                g2.clearRect(0, 0, getWidth(), getHeight());
-                for (Positionable p : ls.objs) {
-                    drawPos(g2, p);
-                }
-                drawPos(g2, new Positionable() {
-                    {
-                        x = 100;
-                        y = 110;
-                    }
-                });
-            }
-        });
-        SwingAWTUtils.validate(p);
+    private static void gui_ls(LogixSystem ls) {
+        JPanel f = Test.pane;
+        SwingAWTUtils.removeAll(f);
+        JCircuitArea jca = new JCircuitArea(f.getSize(), ls);
+        jca.setVisible(true);
+        f.add(jca, Test.center);
+        SwingAWTUtils.validate(f);
     }
 
     protected static void drawPos(Graphics g, Positionable p) {
