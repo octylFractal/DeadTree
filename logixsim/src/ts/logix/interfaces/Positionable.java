@@ -1,7 +1,7 @@
 package ts.logix.interfaces;
 
 public abstract class Positionable {
-    int x, y;
+    public int x, y;
 
     public int getX() {
         return x;
