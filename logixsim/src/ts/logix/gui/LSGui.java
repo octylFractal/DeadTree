@@ -6,7 +6,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import k.core.util.gui.SwingAWTUtils;
 
 import ts.logix.Test;
 import ts.logix.file.LogixSystem;
@@ -55,11 +58,25 @@ public class LSGui {
         run.acquireUninterruptibly();
         while (!fake.isLocked()) {
             run.acquireUninterruptibly();
+            LogixSystem ls = system.get();
+            if (ls != null) {
+                gui_ls(ls);
+            }
         }
     }
 
+    private static void gui_ls(LogixSystem ls) {
+        JPanel p = Test.pane;
+        SwingAWTUtils.removeAll(p);
+    }
+
     private static void returnToMenu() {
-        SwingUtilities.invokeLater(rtm_runnable);
+        try {
+            SwingAWTUtils.runOnDispatch(rtm_runnable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SwingUtilities.invokeLater(rtm_runnable);
+        }
     }
 
     public static void close() {
