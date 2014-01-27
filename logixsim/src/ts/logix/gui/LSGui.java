@@ -63,7 +63,7 @@ public class LSGui {
             String name = JOptionPane.showInputDialog(null,
                     "What should this logixsim be called?", "Choose a Name",
                     JOptionPane.QUESTION_MESSAGE);
-            if (name == null) {
+            if (name == null || name.equals("")) {
                 JOptionPane.showMessageDialog(null,
                         "You didn't enter a name, returning to main menu.",
                         "logixsys", JOptionPane.INFORMATION_MESSAGE, null);
