@@ -15,6 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
@@ -75,7 +76,7 @@ public class LSGui {
         POINT = new JPart(img);
     }
 
-    public static class JCircutParts extends JComponent {
+    public static class JCircutParts extends JPanel {
         private static final long serialVersionUID = 1L;
 
         public static final JPart[] parts = {//
