@@ -50,7 +50,7 @@ public class LSGui {
 
     }
 
-    public static class JPart extends JComponent {
+    public static class JPart extends JComponent implements Cloneable {
         private static final long serialVersionUID = 1L;
 
         private BufferedImage img = null;
@@ -62,6 +62,14 @@ public class LSGui {
         @Override
         public void paintComponent(Graphics g) {
             g.drawImage(img, 0, 0, null);
+        }
+
+        @Override
+        public JPart clone() {
+            BufferedImage img2 = new BufferedImage(img.getWidth(),
+                    img.getHeight(), img.getType());
+            img2.createGraphics().drawImage(img, 0, 0, null);
+            return new JPart(img2);
         }
     }
 
@@ -82,6 +90,10 @@ public class LSGui {
         public static final JPart[] parts = {//
         POINT //
         };
+
+        public JCircutParts() {
+
+        }
     }
 
     private static Semaphore run = new Semaphore(1);
