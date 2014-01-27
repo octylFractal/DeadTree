@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.Semaphore;
@@ -94,10 +96,14 @@ public class LSGui {
         private JPart[] myParts = {};
 
         public JCircutParts() {
+            setLayout(new GridBagLayout());
             myParts = parts.clone();
+            GridBagConstraints gbc = (GridBagConstraints) Test.center.clone();
             for (int i = 0; i < myParts.length; i++) {
-                myParts[i] = myParts[i].clone();
+                JPart j = myParts[i].clone();
+                add(j, Test.nextY(gbc));
             }
+            SwingAWTUtils.validate(this);
         }
     }
 
@@ -173,9 +179,14 @@ public class LSGui {
         s.width -= i.left + i.right + bi.right + bi.left;
         s.height -= i.top + i.bottom + bi.top;
         JCircuitArea jca = new JCircuitArea(s, ls);
+        JCircutParts jcp = new JCircutParts();
         jca.setBorder(b);
+        jcp.setBorder(b);
         jca.setVisible(true);
-        f.add(jca, Test.center, 0);
+        jcp.setVisible(true);
+        GridBagConstraints gbc = (GridBagConstraints) Test.center.clone();
+        f.add(jcp, Test.nextX(gbc), 0);
+        f.add(jca, Test.nextX(gbc), 1);
         jca.setLocation(-1, -1);
         SwingAWTUtils.validate(f);
     }
