@@ -34,9 +34,7 @@ public class LSGui {
         private LogixSystem ls;
 
         public JCircuitArea(Dimension size, LogixSystem sim) {
-            setMinimumSize(size);
-            setPreferredSize(getMinimumSize());
-            setSize(getPreferredSize());
+            SwingAWTUtils.setAllSize(this, size, SwingAWTUtils.SETALL);
             ls = sim;
         }
 
@@ -92,6 +90,15 @@ public class LSGui {
         public static final JPart[] parts = {//
         POINT //
         };
+
+        private static final Dimension DEFAULT_DIMENSIONS = new Dimension(200,
+                0);
+
+        public static final Dimension getDefaultForHeight(int height) {
+            Dimension ret = (Dimension) DEFAULT_DIMENSIONS.clone();
+            ret.height = height;
+            return ret;
+        }
 
         private JPart[] myParts = {};
 
@@ -180,6 +187,9 @@ public class LSGui {
         s.height -= i.top + i.bottom + bi.top;
         JCircuitArea jca = new JCircuitArea(s, ls);
         JCircutParts jcp = new JCircutParts();
+        SwingAWTUtils.setAllSize(jcp,
+                JCircutParts.getDefaultForHeight(s.height),
+                SwingAWTUtils.SETALL);
         jca.setBorder(b);
         jcp.setBorder(b);
         jca.setVisible(true);
@@ -187,8 +197,10 @@ public class LSGui {
         GridBagConstraints gbc = (GridBagConstraints) Test.center.clone();
         f.add(jcp, Test.nextX(gbc), 0);
         f.add(jca, Test.nextX(gbc), 1);
-        jca.setLocation(-1, -1);
+        f.pack();
         SwingAWTUtils.validate(f);
+        SwingAWTUtils.drop(f);
+        jca.setLocation(-1, -1);
     }
 
     protected static void drawPos(Graphics g, Positionable p) {
