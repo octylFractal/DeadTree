@@ -91,8 +91,13 @@ public class LSGui {
         POINT //
         };
 
-        public JCircutParts() {
+        private JPart[] myParts = {};
 
+        public JCircutParts() {
+            myParts = parts.clone();
+            for (int i = 0; i < myParts.length; i++) {
+                myParts[i] = myParts[i].clone();
+            }
         }
     }
 
