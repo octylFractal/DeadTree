@@ -64,7 +64,8 @@ public class LSGui {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.drawImage(img, 0, 0, null);
+            int x = (getWidth() / 2) - (img.getWidth()), y = 0;
+            g.drawImage(img, x, y, null);
         }
 
         @Override
