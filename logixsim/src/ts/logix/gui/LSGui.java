@@ -3,7 +3,9 @@ package ts.logix.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.image.BufferedImage;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
@@ -45,6 +47,40 @@ public class LSGui {
             super.paint(g);
         }
 
+    }
+
+    public static class JPart extends JComponent {
+        private static final long serialVersionUID = 1L;
+
+        private BufferedImage img = null;
+
+        public JPart(BufferedImage image) {
+            img = image;
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            g.drawImage(img, 0, 0, null);
+        }
+    }
+
+    public static final JPart POINT;
+    static {
+        BufferedImage img = new BufferedImage(5, 5, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+        g.setColor(new Color(0, 0, 0, 0));
+        g.clearRect(0, 0, 5, 5);
+        g.setColor(Color.GRAY);
+        g.fillOval(0, 0, 5, 5);
+        POINT = new JPart(img);
+    }
+
+    public static class JCircutParts extends JComponent {
+        private static final long serialVersionUID = 1L;
+
+        public static final JPart[] parts = {//
+        POINT //
+        };
     }
 
     private static Semaphore run = new Semaphore(1);
