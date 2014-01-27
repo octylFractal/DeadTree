@@ -3,14 +3,16 @@ package ts.logix.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import k.core.util.gui.SwingAWTUtils;
@@ -39,6 +41,7 @@ public class LSGui {
             for (Positionable p : ls.objs) {
                 drawPos(g, p);
             }
+            super.paint(g);
         }
 
     }
@@ -107,9 +110,14 @@ public class LSGui {
     }
 
     private static void gui_ls(LogixSystem ls) {
-        JPanel f = Test.pane;
-        SwingAWTUtils.removeAll(f);
-        JCircuitArea jca = new JCircuitArea(f.getSize(), ls);
+        JFrame f = Test.frame;
+        f.setLayout(Test.DEFAULT_MANAGER);
+        Dimension s = f.getSize();
+        Insets i = f.getInsets();
+        s.width -= i.left + i.right;
+        s.height -= i.top + i.bottom;
+        JCircuitArea jca = new JCircuitArea(s, ls);
+        jca.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         jca.setVisible(true);
         f.add(jca, Test.center);
         SwingAWTUtils.validate(f);
