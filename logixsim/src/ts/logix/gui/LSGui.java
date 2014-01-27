@@ -14,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 import k.core.util.gui.SwingAWTUtils;
 import ts.logix.Test;
@@ -113,13 +114,15 @@ public class LSGui {
         JFrame f = Test.frame;
         f.setLayout(Test.DEFAULT_MANAGER);
         Dimension s = f.getSize();
-        Insets i = f.getInsets();
-        s.width -= i.left + i.right;
-        s.height -= i.top + i.bottom;
+        Border b = BorderFactory.createLineBorder(Color.BLACK);
+        Insets i = f.getInsets(), bi = new Insets(1, 1, 1, 1);
+        s.width -= i.left + i.right + bi.right + bi.left;
+        s.height -= i.top + i.bottom + bi.top;
         JCircuitArea jca = new JCircuitArea(s, ls);
-        jca.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        jca.setBorder(b);
         jca.setVisible(true);
-        f.add(jca, Test.center);
+        f.add(jca, Test.center, 0);
+        jca.setLocation(-1, -1);
         SwingAWTUtils.validate(f);
     }
 
