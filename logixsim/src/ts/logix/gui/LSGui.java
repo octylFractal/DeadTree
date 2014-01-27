@@ -16,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -50,17 +51,19 @@ public class LSGui {
 
     }
 
-    public static class JPart extends JComponent implements Cloneable {
+    public static class JPart extends JLabel implements Cloneable {
         private static final long serialVersionUID = 1L;
 
         private BufferedImage img = null;
 
-        public JPart(BufferedImage image) {
+        public JPart(BufferedImage image, String name) {
+            super(name);
             img = image;
         }
 
         @Override
         public void paintComponent(Graphics g) {
+            super.paintComponent(g);
             g.drawImage(img, 0, 0, null);
         }
 
@@ -69,19 +72,20 @@ public class LSGui {
             BufferedImage img2 = new BufferedImage(img.getWidth(),
                     img.getHeight(), img.getType());
             img2.createGraphics().drawImage(img, 0, 0, null);
-            return new JPart(img2);
+            return new JPart(img2, super.getText());
         }
     }
 
     public static final JPart POINT;
     static {
-        BufferedImage img = new BufferedImage(5, 5, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img = new BufferedImage(10, 10,
+                BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = img.createGraphics();
         g.setColor(new Color(0, 0, 0, 0));
-        g.clearRect(0, 0, 5, 5);
+        g.fillRect(0, 0, 10, 10);
         g.setColor(Color.GRAY);
-        g.fillOval(0, 0, 5, 5);
-        POINT = new JPart(img);
+        g.fillOval(0, 0, 7, 7);
+        POINT = new JPart(img, "Point");
     }
 
     public static class JCircutParts extends JPanel {
