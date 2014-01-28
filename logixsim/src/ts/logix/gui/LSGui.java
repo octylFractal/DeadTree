@@ -70,6 +70,24 @@ public class LSGui {
                 SwingAWTUtils.setAllSize(this, Test.frame.getContentPane()
                         .getSize(), SwingAWTUtils.SETALL);
                 setVisible(true);
+                addMouseListener(new MouseAdapter() {
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        SwingAWTUtils.setAllSize(JDraggingPart.this, Test.frame
+                                .getContentPane().getSize(),
+                                SwingAWTUtils.SETALL);
+                        dx = getX();
+                        dy = getY();
+                        setLocation(0, 0);
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        release(e);
+                    }
+
+                });
                 addMouseMotionListener(new MouseMotionAdapter() {
 
                     @Override
@@ -78,8 +96,8 @@ public class LSGui {
                         Insets i = Test.frame.getInsets();
                         BufferedImage img = getSuperImg();
                         int x = e.getXOnScreen() - los.x - i.left
-                                - img.getWidth(), y = e.getYOnScreen() - los.y
-                                - i.top - img.getHeight();
+                                - img.getWidth() / 2, y = e.getYOnScreen()
+                                - los.y - i.top - img.getHeight() / 2;
                         dx = x;
                         dy = y;
                         repaint();
@@ -104,6 +122,10 @@ public class LSGui {
                         this,
                         new Dimension(super.img.getWidth(), super.img
                                 .getHeight()), SwingAWTUtils.SETALL);
+                setLocation(dx, dy);
+                SwingAWTUtils.validate(getParent());
+                dx = 0;
+                dy = 0;
             }
 
         }
@@ -129,7 +151,11 @@ public class LSGui {
 
                     @Override
                     public void mouseReleased(MouseEvent e) {
-                        drag.release(e);
+                        e = new MouseEvent(drag, e.getID(), e.getWhen(),
+                                e.getModifiers(), e.getX(), e.getY(),
+                                e.getXOnScreen(), e.getYOnScreen(),
+                                e.getClickCount(), false, e.getButton());
+                        drag.processMouseEvent(e);
                         drag = null;
                     }
 
