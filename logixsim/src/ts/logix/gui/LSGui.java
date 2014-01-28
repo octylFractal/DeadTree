@@ -7,6 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
@@ -54,11 +57,67 @@ public class LSGui {
     public static class JPart extends JLabel implements Cloneable {
         private static final long serialVersionUID = 1L;
 
+        private static class JDraggingPart extends JPart implements Cloneable {
+            private static final long serialVersionUID = 1L;
+
+            public JDraggingPart(JPart j) {
+                super(j.img, j.getText());
+                setSize(0, 0);
+                setVisible(true);
+                addMouseMotionListener(new MouseMotionAdapter() {
+
+                    @Override
+                    public void mouseDragged(MouseEvent e) {
+                        setLocation(e.getX(), e.getY());
+                        paintComponent(getComponentGraphics(getGraphics()));
+                    }
+                });
+            }
+
+            @Override
+            public void paintComponent(Graphics g) {
+                g.drawImage(super.img, 0, 0, null);
+                System.err.println("rp");
+            }
+
+        }
+
         private BufferedImage img = null;
+
+        private JDraggingPart drag = null;
 
         public JPart(BufferedImage image, String name) {
             super(name);
             img = image;
+
+            if (getClass() == JPart.class) {
+                addMouseListener(new MouseAdapter() {
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        drag = new JDraggingPart(JPart.this.clone());
+                        Test.frame.add(drag);
+                        SwingAWTUtils.validate(getParent());
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        Test.frame.remove(drag);
+                        SwingAWTUtils.validate(getParent());
+                        drag = null;
+                    }
+
+                });
+                addMouseMotionListener(new MouseMotionAdapter() {
+
+                    @Override
+                    public void mouseDragged(MouseEvent e) {
+                        if (drag != null) {
+                            drag.processMouseMotionEvent(e);
+                        }
+                    }
+                });
+            }
         }
 
         @Override
