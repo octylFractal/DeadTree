@@ -100,6 +100,18 @@ public class LSGui {
                                 - los.y - i.top - img.getHeight() / 2;
                         dx = x;
                         dy = y;
+                        if (dx < 0) {
+                            dx = 0;
+                        }
+                        if (dy < 0) {
+                            dy = 0;
+                        }
+                        if (dx >= getWidth()) {
+                            dx = getWidth() - 1;
+                        }
+                        if (dy >= getHeight()) {
+                            dy = getHeight() - 1;
+                        }
                         repaint();
                     }
                 });
