@@ -99,6 +99,13 @@ public class LSGui {
                 g.drawImage(super.img, dx, dy, null);
             }
 
+            public void release(MouseEvent e) {
+                SwingAWTUtils.setAllSize(
+                        this,
+                        new Dimension(super.img.getWidth(), super.img
+                                .getHeight()), SwingAWTUtils.SETALL);
+            }
+
         }
 
         private BufferedImage img = null;
@@ -122,8 +129,7 @@ public class LSGui {
 
                     @Override
                     public void mouseReleased(MouseEvent e) {
-                        Test.frame.getLayeredPane().remove(drag);
-                        SwingAWTUtils.validate(getParent());
+                        drag.release(e);
                         drag = null;
                     }
 
