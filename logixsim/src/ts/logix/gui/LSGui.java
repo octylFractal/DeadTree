@@ -42,6 +42,7 @@ public class LSGui {
         public JCircuitArea(Dimension size, LogixSystem sim) {
             SwingAWTUtils.setAllSize(this, size, SwingAWTUtils.SETALL);
             ls = sim;
+            setBackground(Color.WHITE);
         }
 
         @Override
