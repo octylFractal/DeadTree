@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -20,6 +21,7 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -60,24 +62,40 @@ public class LSGui {
         private static class JDraggingPart extends JPart implements Cloneable {
             private static final long serialVersionUID = 1L;
 
+            int dx = -1, dy = -1;
+
             public JDraggingPart(JPart j) {
                 super(j.img, j.getText());
-                setSize(0, 0);
+                SwingAWTUtils.setAllSize(this, Test.frame.getContentPane()
+                        .getSize(), SwingAWTUtils.SETALL);
                 setVisible(true);
                 addMouseMotionListener(new MouseMotionAdapter() {
 
                     @Override
                     public void mouseDragged(MouseEvent e) {
-                        setLocation(e.getX(), e.getY());
-                        paintComponent(getComponentGraphics(getGraphics()));
+                        Point los = Test.frame.getLocationOnScreen();
+                        Insets i = Test.frame.getInsets();
+                        BufferedImage img = getSuperImg();
+                        int x = e.getXOnScreen() - los.x - i.left
+                                - img.getWidth(), y = e.getYOnScreen() - los.y
+                                - i.top - img.getHeight();
+                        dx = x;
+                        dy = y;
+                        repaint();
                     }
                 });
             }
 
+            public BufferedImage getSuperImg() {
+                return super.img;
+            }
+
             @Override
             public void paintComponent(Graphics g) {
-                g.drawImage(super.img, 0, 0, null);
-                System.err.println("rp");
+                if (dx == -1 || dy == -1) {
+                    return;
+                }
+                g.drawImage(super.img, dx, dy, null);
             }
 
         }
@@ -96,13 +114,14 @@ public class LSGui {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         drag = new JDraggingPart(JPart.this.clone());
-                        Test.frame.add(drag);
+                        Test.frame.getLayeredPane().add(drag,
+                                JLayeredPane.DEFAULT_LAYER, 0);
                         SwingAWTUtils.validate(getParent());
                     }
 
                     @Override
                     public void mouseReleased(MouseEvent e) {
-                        Test.frame.remove(drag);
+                        Test.frame.getLayeredPane().remove(drag);
                         SwingAWTUtils.validate(getParent());
                         drag = null;
                     }
@@ -113,6 +132,10 @@ public class LSGui {
                     @Override
                     public void mouseDragged(MouseEvent e) {
                         if (drag != null) {
+                            e = new MouseEvent(drag, e.getID(), e.getWhen(),
+                                    e.getModifiers(), e.getX(), e.getY(),
+                                    e.getXOnScreen(), e.getYOnScreen(),
+                                    e.getClickCount(), false, e.getButton());
                             drag.processMouseMotionEvent(e);
                         }
                     }
