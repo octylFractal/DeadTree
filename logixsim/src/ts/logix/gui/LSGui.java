@@ -160,7 +160,7 @@ public class LSGui {
             super(name);
             img = image;
 
-            if (getClass() == JPart.class) {
+            if (!JDraggingPart.class.isInstance(this)) {
                 addMouseListener(new MouseAdapter() {
 
                     @Override
@@ -168,6 +168,9 @@ public class LSGui {
                         drag = new JDraggingPart(JPart.this.clone());
                         Test.frame.getLayeredPane().add(drag,
                                 JLayeredPane.DEFAULT_LAYER, 0);
+                        if(getParent() == null) {
+                            System.err.println("null parent");
+                        }
                         SwingAWTUtils.validate(getParent());
                     }
 
@@ -217,7 +220,8 @@ public class LSGui {
                 c.setText(getText());
                 return c;
             } catch (CloneNotSupportedException e) {
-                throw new InternalError(); // should not happen, we are cloneable
+                throw new InternalError(); // should not happen, we are
+                                           // cloneable
             }
         }
 
@@ -248,7 +252,10 @@ public class LSGui {
 
         @Override
         public void released0(MouseEvent e) {
-
+            PPyPoint ppp = new PPyPoint();
+            ppp.x = getX();
+            ppp.y = getY();
+            sys().objs.add(ppp);
         }
 
     }
@@ -296,6 +303,10 @@ public class LSGui {
         }
     };
 
+    public static LogixSystem sys() {
+        return system.get();
+    }
+
     public static void begin(boolean newLS) {
         if (newLS) {
             String name = JOptionPane.showInputDialog(null,
@@ -331,7 +342,7 @@ public class LSGui {
             if (fake.isLocked()) {
                 continue;
             }
-            final LogixSystem ls = system.get();
+            final LogixSystem ls = sys();
             if (ls != null) {
                 try {
                     SwingAWTUtils.runOnDispatch(new Runnable() {
