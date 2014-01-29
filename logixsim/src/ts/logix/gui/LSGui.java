@@ -106,11 +106,13 @@ public class LSGui {
                         if (dy < 0) {
                             dy = 0;
                         }
-                        if (dx >= getWidth()) {
-                            dx = getWidth() - 1;
+                        int width = getWidth() - img.getWidth(), height = getHeight()
+                                - img.getHeight();
+                        if (dx >= width) {
+                            dx = width - 1;
                         }
-                        if (dy >= getHeight()) {
-                            dy = getHeight() - 1;
+                        if (dy >= height) {
+                            dy = height - 1;
                         }
                         repaint();
                     }
@@ -206,11 +208,11 @@ public class LSGui {
 
     public static final JPart POINT;
     static {
-        BufferedImage img = new BufferedImage(10, 10,
+        BufferedImage img = new BufferedImage(7, 7,
                 BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = img.createGraphics();
         g.setColor(new Color(0, 0, 0, 0));
-        g.fillRect(0, 0, 10, 10);
+        g.fillRect(0, 0, 7, 7);
         g.setColor(Color.GRAY);
         g.fillOval(0, 0, 7, 7);
         POINT = new JPart(img, "Point");
