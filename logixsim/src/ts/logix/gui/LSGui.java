@@ -57,13 +57,14 @@ public class LSGui {
 
     }
 
-    public static class JPart extends JLabel implements Cloneable {
+    public abstract static class JPart extends JLabel implements Cloneable {
         private static final long serialVersionUID = 1L;
 
         private static class JDraggingPart extends JPart implements Cloneable {
             private static final long serialVersionUID = 1L;
 
             int dx = -1, dy = -1;
+            JPart part = null;
 
             public JDraggingPart(JPart j) {
                 super(j.img, j.getText());
@@ -117,6 +118,7 @@ public class LSGui {
                         repaint();
                     }
                 });
+                part = j;
             }
 
             public BufferedImage getSuperImg() {
@@ -140,6 +142,12 @@ public class LSGui {
                 SwingAWTUtils.validate(getParent());
                 dx = 0;
                 dy = 0;
+                part.released(e);
+            }
+
+            @Override
+            public void released0(MouseEvent e) {
+                e.consume();
             }
 
         }
@@ -199,24 +207,53 @@ public class LSGui {
 
         @Override
         public JPart clone() {
-            BufferedImage img2 = new BufferedImage(img.getWidth(),
-                    img.getHeight(), img.getType());
-            img2.createGraphics().drawImage(img, 0, 0, null);
-            return new JPart(img2, super.getText());
+            try {
+                JPart c = (JPart) super.clone();
+                BufferedImage img1 = new BufferedImage(img.getWidth(),
+                        img.getHeight(), img.getType());
+                Graphics g = img1.createGraphics();
+                g.drawImage(img, 0, 0, null);
+                c.img = img1;
+                c.setText(getText());
+                return c;
+            } catch (CloneNotSupportedException e) {
+                throw new InternalError(); // should not happen, we are cloneable
+            }
         }
+
+        public void released(MouseEvent e) {
+            released0(e);
+        }
+
+        public abstract void released0(MouseEvent e);
     }
 
-    public static final JPart POINT;
-    static {
-        BufferedImage img = new BufferedImage(7, 7,
-                BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = img.createGraphics();
-        g.setColor(new Color(0, 0, 0, 0));
-        g.fillRect(0, 0, 7, 7);
-        g.setColor(Color.GRAY);
-        g.fillOval(0, 0, 7, 7);
-        POINT = new JPart(img, "Point");
+    public static class JPointPart extends JPart {
+        private static final long serialVersionUID = 1L;
+
+        public static JPointPart create() {
+            BufferedImage img = new BufferedImage(7, 7,
+                    BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = img.createGraphics();
+            g.setColor(new Color(0, 0, 0, 0));
+            g.fillRect(0, 0, 7, 7);
+            g.setColor(Color.GRAY);
+            g.fillOval(0, 0, 7, 7);
+            return new JPointPart(img, "Point");
+        }
+
+        private JPointPart(BufferedImage image, String name) {
+            super(image, name);
+        }
+
+        @Override
+        public void released0(MouseEvent e) {
+
+        }
+
     }
+
+    public static final JPart POINT = JPointPart.create();
 
     public static class JCircutParts extends JPanel {
         private static final long serialVersionUID = 1L;
