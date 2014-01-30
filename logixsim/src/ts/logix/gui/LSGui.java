@@ -170,6 +170,7 @@ public class LSGui {
                                 JLayeredPane.DEFAULT_LAYER, 0);
                         if(getParent() == null) {
                             System.err.println("null parent");
+                            return;
                         }
                         SwingAWTUtils.validate(getParent());
                     }
