@@ -1,4 +1,4 @@
-package ts.logix.interfaces;
+package ts.logix.positionables;
 
 public abstract class Positionable {
     public int x, y;
