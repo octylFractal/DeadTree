@@ -12,7 +12,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import k.core.util.Helper.BetterArrays;
 import k.core.util.netty.DataStruct;
-import ts.logix.interfaces.Positionable;
+import ts.logix.positionables.Positionable;
 
 public class LogixSystem {
     public static final String fileext = "lsys";
