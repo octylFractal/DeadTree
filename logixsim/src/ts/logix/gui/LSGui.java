@@ -50,7 +50,8 @@ public class LSGui {
             g.setColor(getBackground());
             g.clearRect(0, 0, getWidth(), getHeight());
             for (Positionable p : ls.objs) {
-                drawPos(g, p);
+                if (p.isVisible())
+                    drawPos(g, p);
             }
             super.paint(g);
         }
@@ -142,11 +143,11 @@ public class LSGui {
                 SwingAWTUtils.validate(getParent());
                 dx = 0;
                 dy = 0;
-                part.released(e);
+                part.released(e, getX(), getY());
             }
 
             @Override
-            public void released0(MouseEvent e) {
+            public void released0(MouseEvent e, int x, int y) {
                 e.consume();
             }
 
@@ -168,7 +169,7 @@ public class LSGui {
                         drag = new JDraggingPart(JPart.this.clone());
                         Test.frame.getLayeredPane().add(drag,
                                 JLayeredPane.DEFAULT_LAYER, 0);
-                        if(getParent() == null) {
+                        if (getParent() == null) {
                             System.err.println("null parent");
                             return;
                         }
@@ -226,11 +227,11 @@ public class LSGui {
             }
         }
 
-        public void released(MouseEvent e) {
-            released0(e);
+        public void released(MouseEvent e, int x, int y) {
+            released0(e, x, y);
         }
 
-        public abstract void released0(MouseEvent e);
+        public abstract void released0(MouseEvent e, int x, int y);
     }
 
     public static class JPointPart extends JPart {
@@ -247,16 +248,22 @@ public class LSGui {
             return new JPointPart(img, "Point");
         }
 
+        private PPyPoint ppp;
+
         private JPointPart(BufferedImage image, String name) {
             super(image, name);
+            ppp = new PPyPoint();
+            ppp.setVisible(false);
         }
 
         @Override
-        public void released0(MouseEvent e) {
-            PPyPoint ppp = new PPyPoint();
-            ppp.x = getX();
-            ppp.y = getY();
-            sys().objs.add(ppp);
+        public void released0(MouseEvent e, int x, int y) {
+            ppp.x = x;
+            ppp.y = y;
+            ppp.setVisible(true);
+            if (!sys().objs.contains(ppp)) {
+                sys().objs.add(ppp);
+            }
         }
 
     }
@@ -388,6 +395,7 @@ public class LSGui {
 
     protected static void drawPos(Graphics g, Positionable p) {
         if (p instanceof PPyPoint) {
+            System.err.println(p);
             PPyPoint point = (PPyPoint) p;
             g.setColor(PointSys.readConnection(point.point).isEmpty() ? Color.GRAY
                     : Color.GREEN);
