@@ -30,8 +30,8 @@ import javax.swing.border.Border;
 import k.core.util.gui.SwingAWTUtils;
 import ts.logix.Test;
 import ts.logix.file.LogixSystem;
-import ts.logix.interfaces.Positionable;
 import ts.logix.positionables.PPyPoint;
+import ts.logix.positionables.Positionable;
 import ts.logix.py.PointSys;
 
 public class LSGui {
@@ -61,14 +61,27 @@ public class LSGui {
     public abstract static class JPart extends JLabel implements Cloneable {
         private static final long serialVersionUID = 1L;
 
+        /*
+         * Assumes that this is setup in a LSGui. Doesn't work without one!
+         */
         private static class JDraggingPart extends JPart implements Cloneable {
             private static final long serialVersionUID = 1L;
 
             int dx = -1, dy = -1;
             JPart part = null;
+            JCircutParts part_parent = null;
 
+            /*
+             * Assumes that j is under a JCircutParts to avoid passing a second
+             * parameter
+             */
             public JDraggingPart(JPart j) {
                 super(j.img, j.getText());
+                if (!(j.getParent() instanceof JCircutParts)) {
+                    throw new IllegalStateException(
+                            "Parent does not extend JCircutParts");
+                }
+                part_parent = (JCircutParts) j.getParent();
                 SwingAWTUtils.setAllSize(this, Test.frame.getContentPane()
                         .getSize(), SwingAWTUtils.SETALL);
                 setVisible(true);
@@ -141,9 +154,11 @@ public class LSGui {
                                 .getHeight()), SwingAWTUtils.SETALL);
                 setLocation(dx, dy);
                 SwingAWTUtils.validate(getParent());
+                int px = dx, py = dy;
                 dx = 0;
                 dy = 0;
-                part.released(e, getX(), getY());
+                px -= part_parent.getWidth();
+                part.released(e, px, py);
             }
 
             @Override
