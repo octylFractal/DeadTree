@@ -181,18 +181,21 @@ public class LSGui {
 
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        drag = new JDraggingPart(JPart.this.clone());
-                        Test.frame.getLayeredPane().add(drag,
-                                JLayeredPane.DEFAULT_LAYER, 0);
                         if (getParent() == null) {
                             System.err.println("null parent");
                             return;
                         }
+                        drag = new JDraggingPart(JPart.this.clone());
+                        Test.frame.getLayeredPane().add(drag,
+                                JLayeredPane.DEFAULT_LAYER, 0);
                         SwingAWTUtils.validate(getParent());
                     }
 
                     @Override
                     public void mouseReleased(MouseEvent e) {
+                        if (drag == null) {
+                            return;
+                        }
                         e = new MouseEvent(drag, e.getID(), e.getWhen(),
                                 e.getModifiers(), e.getX(), e.getY(),
                                 e.getXOnScreen(), e.getYOnScreen(),
