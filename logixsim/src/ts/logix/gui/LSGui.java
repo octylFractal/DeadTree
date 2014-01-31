@@ -468,11 +468,10 @@ public class LSGui {
 
     protected static void drawPos(Graphics g, Positionable p) {
         if (p instanceof PPyPoint) {
-            System.err.println(p);
             PPyPoint point = (PPyPoint) p;
             g.setColor(PointSys.readConnection(point.point).isEmpty() ? Color.GRAY
                     : Color.GREEN);
-            g.fillOval(p.getX(), p.getY(), 5, 5);
+            g.fillOval(p.getX(), p.getY(), 7, 7);
         }
     }
 
