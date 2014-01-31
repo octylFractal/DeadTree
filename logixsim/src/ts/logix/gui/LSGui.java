@@ -12,6 +12,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
@@ -58,7 +60,8 @@ public class LSGui {
 
     }
 
-    public abstract static class JPart extends JLabel implements Cloneable {
+    public abstract static class JPart extends JLabel implements Cloneable,
+            Serializable {
         private static final long serialVersionUID = 1L;
 
         /*
@@ -70,6 +73,8 @@ public class LSGui {
             int dx = -1, dy = -1;
             JPart part = null;
             JCircutParts part_parent = null;
+
+            private boolean fake_invis;
 
             /*
              * Assumes that j is under a JCircutParts to avoid passing a second
@@ -85,6 +90,55 @@ public class LSGui {
                 SwingAWTUtils.setAllSize(this, Test.frame.getContentPane()
                         .getSize(), SwingAWTUtils.SETALL);
                 setVisible(true);
+                init();
+                part = j;
+            }
+
+            public BufferedImage getSuperImg() {
+                return super.img;
+            }
+
+            @Override
+            public void paintComponent(Graphics g) {
+                if (dx == -1 || dy == -1 || fake_invis) {
+                    return;
+                }
+                g.drawImage(super.img, dx, dy, null);
+            }
+
+            public void release(MouseEvent e) {
+                SwingAWTUtils.setAllSize(
+                        this,
+                        new Dimension(super.img.getWidth(), super.img
+                                .getHeight()), SwingAWTUtils.SETALL);
+                setLocation(dx, dy);
+                SwingAWTUtils.validate(getParent());
+                int px = dx, py = dy;
+                dx = 0;
+                dy = 0;
+                px -= part_parent.getWidth();
+                part.released(e, px, py);
+                fake_invis = true;
+            }
+
+            public void drag(MouseEvent e) {
+                int px = dx, py = dy;
+                px -= part_parent.getWidth();
+                part.dragged(e, px, py);
+                fake_invis = false;
+            }
+
+            @Override
+            public void released0(MouseEvent e, int x, int y) {
+                e.consume();
+            }
+
+            @Override
+            public void dragged0(MouseEvent e, int x, int y) {
+                e.consume();
+            }
+
+            private void init() {
                 addMouseListener(new MouseAdapter() {
 
                     @Override
@@ -130,42 +184,10 @@ public class LSGui {
                             dy = height - 1;
                         }
                         repaint();
+                        drag(e);
                     }
                 });
-                part = j;
             }
-
-            public BufferedImage getSuperImg() {
-                return super.img;
-            }
-
-            @Override
-            public void paintComponent(Graphics g) {
-                if (dx == -1 || dy == -1) {
-                    return;
-                }
-                g.drawImage(super.img, dx, dy, null);
-            }
-
-            public void release(MouseEvent e) {
-                SwingAWTUtils.setAllSize(
-                        this,
-                        new Dimension(super.img.getWidth(), super.img
-                                .getHeight()), SwingAWTUtils.SETALL);
-                setLocation(dx, dy);
-                SwingAWTUtils.validate(getParent());
-                int px = dx, py = dy;
-                dx = 0;
-                dy = 0;
-                px -= part_parent.getWidth();
-                part.released(e, px, py);
-            }
-
-            @Override
-            public void released0(MouseEvent e, int x, int y) {
-                e.consume();
-            }
-
         }
 
         private transient BufferedImage img = null;
@@ -177,47 +199,7 @@ public class LSGui {
             img = image;
 
             if (!JDraggingPart.class.isInstance(this)) {
-                addMouseListener(new MouseAdapter() {
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        if (getParent() == null) {
-                            System.err.println("null parent");
-                            return;
-                        }
-                        drag = new JDraggingPart(JPart.this.clone());
-                        Test.frame.getLayeredPane().add(drag,
-                                JLayeredPane.DEFAULT_LAYER, 0);
-                        SwingAWTUtils.validate(getParent());
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        if (drag == null) {
-                            return;
-                        }
-                        e = new MouseEvent(drag, e.getID(), e.getWhen(),
-                                e.getModifiers(), e.getX(), e.getY(),
-                                e.getXOnScreen(), e.getYOnScreen(),
-                                e.getClickCount(), false, e.getButton());
-                        drag.processMouseEvent(e);
-                        drag = null;
-                    }
-
-                });
-                addMouseMotionListener(new MouseMotionAdapter() {
-
-                    @Override
-                    public void mouseDragged(MouseEvent e) {
-                        if (drag != null) {
-                            e = new MouseEvent(drag, e.getID(), e.getWhen(),
-                                    e.getModifiers(), e.getX(), e.getY(),
-                                    e.getXOnScreen(), e.getYOnScreen(),
-                                    e.getClickCount(), false, e.getButton());
-                            drag.processMouseMotionEvent(e);
-                        }
-                    }
-                });
+                init();
             }
         }
 
@@ -244,7 +226,63 @@ public class LSGui {
             released0(e, x, y);
         }
 
+        public void dragged(MouseEvent e, int x, int y) {
+            dragged0(e, x, y);
+        }
+
+        private void readObject(java.io.ObjectInputStream in)
+                throws IOException, ClassNotFoundException {
+            in.defaultReadObject();
+            init();
+        }
+
+        private void init() {
+            addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (getParent() == null) {
+                        System.err.println("null parent");
+                        return;
+                    }
+                    drag = new JDraggingPart(JPart.this);
+                    Test.frame.getLayeredPane().add(drag,
+                            JLayeredPane.DEFAULT_LAYER, 0);
+                    SwingAWTUtils.validate(getParent());
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (drag == null) {
+                        return;
+                    }
+                    e = new MouseEvent(drag, e.getID(), e.getWhen(),
+                            e.getModifiers(), e.getX(), e.getY(),
+                            e.getXOnScreen(), e.getYOnScreen(),
+                            e.getClickCount(), false, e.getButton());
+                    drag.processMouseEvent(e);
+                    drag = null;
+                }
+
+            });
+            addMouseMotionListener(new MouseMotionAdapter() {
+
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    if (drag != null) {
+                        e = new MouseEvent(drag, e.getID(), e.getWhen(),
+                                e.getModifiers(), e.getX(), e.getY(),
+                                e.getXOnScreen(), e.getYOnScreen(),
+                                e.getClickCount(), false, e.getButton());
+                        drag.processMouseMotionEvent(e);
+                    }
+                }
+            });
+        }
+
         public abstract void released0(MouseEvent e, int x, int y);
+
+        public abstract void dragged0(MouseEvent e, int x, int y);
     }
 
     public static class JPointPart extends JPart {
@@ -270,6 +308,11 @@ public class LSGui {
         }
 
         @Override
+        public void dragged0(MouseEvent e, int x, int y) {
+            ppp.setVisible(false);
+        }
+
+        @Override
         public void released0(MouseEvent e, int x, int y) {
             ppp.x = x;
             ppp.y = y;
@@ -277,6 +320,23 @@ public class LSGui {
             if (!sys().objs.contains(ppp)) {
                 sys().objs.add(ppp);
             }
+        }
+
+        private void writeObject(java.io.ObjectOutputStream s)
+                throws IOException, ClassNotFoundException {
+            s.defaultWriteObject();
+            s.writeInt(ppp.x);
+            s.writeInt(ppp.y);
+            s.writeBoolean(ppp.isVisible());
+        }
+
+        private void readObject(java.io.ObjectInputStream s)
+                throws IOException, ClassNotFoundException {
+            s.defaultReadObject();
+            ppp = new PPyPoint();
+            ppp.x = s.readInt();
+            ppp.y = s.readInt();
+            ppp.setVisible(s.readBoolean());
         }
 
     }
