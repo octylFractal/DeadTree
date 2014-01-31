@@ -168,7 +168,7 @@ public class LSGui {
 
         }
 
-        private BufferedImage img = null;
+        private transient BufferedImage img = null;
 
         private JDraggingPart drag = null;
 
@@ -261,7 +261,7 @@ public class LSGui {
             return new JPointPart(img, "Point");
         }
 
-        private PPyPoint ppp;
+        private transient PPyPoint ppp;
 
         private JPointPart(BufferedImage image, String name) {
             super(image, name);
