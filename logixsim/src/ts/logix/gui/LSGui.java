@@ -230,19 +230,14 @@ public class LSGui {
 
         @Override
         public JPart clone() {
-            try {
-                JPart c = (JPart) super.clone();
-                BufferedImage img1 = new BufferedImage(img.getWidth(),
-                        img.getHeight(), img.getType());
-                Graphics g = img1.createGraphics();
-                g.drawImage(img, 0, 0, null);
-                c.img = img1;
-                c.setText(getText());
-                return c;
-            } catch (CloneNotSupportedException e) {
-                throw new InternalError(); // should not happen, we are
-                                           // cloneable
-            }
+            JPart c = SwingAWTUtils.cloneLikeSerial(this);
+            BufferedImage img1 = new BufferedImage(img.getWidth(),
+                    img.getHeight(), img.getType());
+            Graphics g = img1.createGraphics();
+            g.drawImage(img, 0, 0, null);
+            c.img = img1;
+            c.setText(getText());
+            return c;
         }
 
         public void released(MouseEvent e, int x, int y) {
