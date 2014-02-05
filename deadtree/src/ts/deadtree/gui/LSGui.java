@@ -14,6 +14,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,6 +31,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import k.core.util.gui.SwingAWTUtils;
+import sun.misc.GC.LatencyRequest;
 import ts.deadtree.Test;
 import ts.deadtree.file.LogixSystem;
 import ts.deadtree.positionables.PPyPoint;
@@ -383,6 +385,12 @@ public class LSGui {
             Test.change_gui(Test.MAINMENU);
         }
     };
+    private static JPanel escMenu;
+
+    static {
+        // esc menu builder
+
+    }
 
     public static LogixSystem sys() {
         return system.get();
@@ -487,6 +495,15 @@ public class LSGui {
     public static void close() {
         fake.lock();
         run.release();
+    }
+
+    public static void escape() {
+        JLayeredPane layered = Test.frame.getLayeredPane();
+        if (layered.getIndexOf(escMenu) > 1) {
+            layered.remove(escMenu);
+        } else {
+            layered.add(escMenu);
+        }
     }
 
 }

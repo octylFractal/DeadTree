@@ -7,6 +7,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -119,6 +121,7 @@ public class Test {
                 LSGui.close();
             }
         });
+        input_setup();
         visual_setup();
         frame.pack();
         SwingAWTUtils.drop(frame);
@@ -129,6 +132,19 @@ public class Test {
     private static void visual_setup() {
         frame.add(pane);
         change_gui(LOADINGSCREEN);
+    }
+
+    private static void input_setup() {
+        frame.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                int key = e.getKeyCode();
+                if (key == KeyEvent.VK_ESCAPE
+                        && (loadedID == NEWSYS || loadedID == LOADSYS)) {
+                    LSGui.escape();
+                }
+            }
+        });
     }
 
     public static GridBagConstraints nextX(GridBagConstraints gbc) {
