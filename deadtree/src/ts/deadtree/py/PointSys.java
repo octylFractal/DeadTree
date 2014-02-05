@@ -1,11 +1,11 @@
-package ts.logix.py;
+package ts.deadtree.py;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import ts.logix.interfaces.GridObject;
+import ts.deadtree.interfaces.GridObject;
 
 /**
  * The matching Python file is named pointsys.py.

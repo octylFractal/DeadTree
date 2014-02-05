@@ -1,4 +1,4 @@
-package ts.logix.interfaces;
+package ts.deadtree.interfaces;
 
 /**
  * An interface that marks this object as usable in a grid of other GridObjects.

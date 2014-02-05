@@ -1,4 +1,4 @@
-package ts.logix.positionables;
+package ts.deadtree.positionables;
 
 public abstract class Positionable {
     public int x, y;

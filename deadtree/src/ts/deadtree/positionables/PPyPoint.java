@@ -1,6 +1,6 @@
-package ts.logix.positionables;
+package ts.deadtree.positionables;
 
-import ts.logix.py.PointSys.PyPoint;
+import ts.deadtree.py.PointSys.PyPoint;
 
 public class PPyPoint extends Positionable {
     public PyPoint point = null;

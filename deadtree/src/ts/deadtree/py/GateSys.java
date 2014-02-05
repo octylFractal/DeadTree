@@ -1,12 +1,12 @@
-package ts.logix.py;
+package ts.deadtree.py;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import ts.logix.interfaces.GridObject;
-import ts.logix.py.PointSys.PyPoint;
+import ts.deadtree.interfaces.GridObject;
+import ts.deadtree.py.PointSys.PyPoint;
 
 /**
  * The matching Python file is named logicsys.py.
@@ -260,7 +260,7 @@ public class GateSys {
          * 
          * @param inputs
          *            - a list of {@link PyPoint PyPoints} to use as input.
-         * @return the result of the logic being preformed on the input list.
+         * @return the result of the logic being performed on the input list.
          */
         protected abstract boolean doLogic_(List<PyPoint> inputs);
 

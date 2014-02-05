@@ -1,4 +1,4 @@
-package ts.logix;
+package ts.deadtree;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,8 +14,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import ts.logix.gui.LSGui;
-
+import ts.deadtree.gui.LSGui;
 import k.core.util.Helper;
 import k.core.util.gui.JClickableText;
 import k.core.util.gui.SwingAWTUtils;
@@ -29,10 +28,10 @@ public class Test {
     public static JFrame frame;
     public static JPanel pane = new JPanel();
     public static JClickableText welcome = new JClickableText(
-            "Welcome to LogixSim!"), new_mm_button = new JClickableText(
+            "Welcome to DeadTree!"), new_mm_button = new JClickableText(
             "New logixsys..."), load_mm_button = new JClickableText(
             "Load logixsys..."), quit_mm_button = new JClickableText(
-            "Quit logixsim...");
+            "Quit DeadTree...");
     public static GridBagConstraints center = new GridBagConstraints();
     public static int loadedID = LOADINGSCREEN;
 
@@ -110,7 +109,7 @@ public class Test {
     }
 
     private static void display_init() {
-        frame = new JFrame("logixsim");
+        frame = new JFrame("DeadTree");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setMinimumSize(new Dimension(800, 600));
         frame.addWindowListener(new WindowAdapter() {

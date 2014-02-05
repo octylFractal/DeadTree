@@ -1,4 +1,4 @@
-package ts.logix.gui;
+package ts.deadtree.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,11 +30,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import k.core.util.gui.SwingAWTUtils;
-import ts.logix.Test;
-import ts.logix.file.LogixSystem;
-import ts.logix.positionables.PPyPoint;
-import ts.logix.positionables.Positionable;
-import ts.logix.py.PointSys;
+import ts.deadtree.Test;
+import ts.deadtree.file.LogixSystem;
+import ts.deadtree.positionables.PPyPoint;
+import ts.deadtree.positionables.Positionable;
+import ts.deadtree.py.PointSys;
 
 public class LSGui {
     public static class JCircuitArea extends JComponent {

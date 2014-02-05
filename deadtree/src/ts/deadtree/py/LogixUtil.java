@@ -1,9 +1,9 @@
-package ts.logix.py;
+package ts.deadtree.py;
 
 import java.util.List;
 
-import ts.logix.py.GateSys.Gate;
-import ts.logix.py.PointSys.PyPoint;
+import ts.deadtree.py.GateSys.Gate;
+import ts.deadtree.py.PointSys.PyPoint;
 
 /**
  * The matching Python file is named logixmain__.py.

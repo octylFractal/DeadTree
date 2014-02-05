@@ -1,4 +1,4 @@
-package ts.logix.file;
+package ts.deadtree.file;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,12 +12,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import k.core.util.Helper.BetterArrays;
 import k.core.util.netty.DataStruct;
-import ts.logix.positionables.Positionable;
+import ts.deadtree.positionables.Positionable;
 
 public class LogixSystem {
     public static final String fileext = "lsys";
     public static final FileNameExtensionFilter filter = new FileNameExtensionFilter(
-            "logixsim Files", fileext);
+            "DeadTree Files", fileext);
     private String id = "";
     public List<Positionable> objs = new ArrayList<Positionable>();
 
