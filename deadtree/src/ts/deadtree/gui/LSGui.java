@@ -14,7 +14,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
@@ -31,7 +31,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import k.core.util.gui.SwingAWTUtils;
-import sun.misc.GC.LatencyRequest;
+import k.core.util.gui.SwingAWTUtils.Size;
 import ts.deadtree.Test;
 import ts.deadtree.file.LogixSystem;
 import ts.deadtree.positionables.PPyPoint;
@@ -44,7 +44,7 @@ public class LSGui {
         private LogixSystem ls;
 
         public JCircuitArea(Dimension size, LogixSystem sim) {
-            SwingAWTUtils.setAllSize(this, size, SwingAWTUtils.SETALL);
+            SwingAWTUtils.setAllSize(this, size, EnumSet.of(Size.SETALL));
             ls = sim;
             setBackground(Color.WHITE);
         }
@@ -90,7 +90,7 @@ public class LSGui {
                 }
                 part_parent = (JCircutParts) j.getParent();
                 SwingAWTUtils.setAllSize(this, Test.frame.getContentPane()
-                        .getSize(), SwingAWTUtils.SETALL);
+                        .getSize(), EnumSet.of(Size.SETALL));
                 setVisible(true);
                 init();
                 part = j;
@@ -112,7 +112,7 @@ public class LSGui {
                 SwingAWTUtils.setAllSize(
                         this,
                         new Dimension(super.img.getWidth(), super.img
-                                .getHeight()), SwingAWTUtils.SETALL);
+                                .getHeight()), EnumSet.of(Size.SETALL));
                 setLocation(dx, dy);
                 SwingAWTUtils.validate(getParent());
                 int px = dx, py = dy;
@@ -146,8 +146,8 @@ public class LSGui {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         SwingAWTUtils.setAllSize(JDraggingPart.this, Test.frame
-                                .getContentPane().getSize(),
-                                SwingAWTUtils.SETALL);
+                                .getContentPane().getSize(), EnumSet
+                                .of(Size.SETALL));
                         dx = getX();
                         dy = getY();
                         setLocation(0, 0);
@@ -460,7 +460,7 @@ public class LSGui {
         JCircutParts jcp = new JCircutParts();
         SwingAWTUtils.setAllSize(jcp,
                 JCircutParts.getDefaultForHeight(s.height),
-                SwingAWTUtils.SETALL);
+                EnumSet.of(Size.SETALL));
         jca.setBorder(b);
         jcp.setBorder(b);
         jca.setVisible(true);
